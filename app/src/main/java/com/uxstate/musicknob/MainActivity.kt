@@ -3,7 +3,7 @@ package com.uxstate.musicknob
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.uxstate.musicknob.ui.theme.MusicKnobTheme
 
@@ -28,4 +28,13 @@ fun MusicKnob(
     onValueChange: (Float) -> Unit
 ) {
 
+
+    var rotation by remember{ mutableStateOf(limitingAngle) }
+
+    //touch val point
+
+    var touchX by remember{ mutableStateOf(0f)}
+    var touchY by remember{ mutableStateOf(0f)}
+    var touchX by remember{ mutableStateOf(0f)}
+    var touchX by remember{ mutableStateOf(0f)}
 }
