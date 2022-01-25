@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
@@ -50,12 +51,25 @@ fun MusicKnob(
         contentDescription = "Music Knob",
         modifier = modifier
                 .fillMaxSize()
+
+                //establish knob anchor position
                 .onGloballyPositioned {
                     val windowBounds = it.boundsInWindow()
 
                     centerX = windowBounds.size.width / 2f
                     centerY = windowBounds.size.height / 2f
 
-                })
+                }
+
+            //establish touch position
+
+                .pointerInteropFilter {
+
+                    motionEvent ->
+
+                    touchX = motionEvent.x
+                    touchY = motionEvent.y
+                }
+    )
 
 }
