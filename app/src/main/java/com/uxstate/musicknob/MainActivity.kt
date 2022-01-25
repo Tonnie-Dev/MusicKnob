@@ -35,6 +35,11 @@ fun MusicKnob(
 
     var touchX by remember{ mutableStateOf(0f)}
     var touchY by remember{ mutableStateOf(0f)}
-    var touchX by remember{ mutableStateOf(0f)}
-    var touchX by remember{ mutableStateOf(0f)}
+
+    //knob centre vals
+    var centerX by remember{ mutableStateOf(0f)}
+    var centerY by remember{ mutableStateOf(0f)}
+
+
+    
 }
