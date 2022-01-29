@@ -5,8 +5,10 @@ import android.view.MotionEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -134,5 +136,14 @@ fun MusicKnob(
 @Composable
 fun VolumeBar(modifier: Modifier = Modifier, activeBars:Int = 0, barCount:Int = 0) {
 
-    
+    BoxWithConstraints(modifier = modifier, contentAlignment = Alignment.Center) {
+
+
+        //calculate bar width
+
+        val barWidth = remember {
+
+            constraints.maxWidth /(barCount * 2f)
+        }
+    }
 }
