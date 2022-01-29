@@ -1,18 +1,19 @@
 package com.uxstate.musicknob
 
 import android.os.Bundle
+import android.view.MotionEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import com.uxstate.musicknob.ui.theme.MusicKnobTheme
-import kotlin.math.atan
 import kotlin.math.atan2
 
 class MainActivity : ComponentActivity() {
@@ -29,6 +30,7 @@ class MainActivity : ComponentActivity() {
 }
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MusicKnob(
     modifier: Modifier = Modifier,
@@ -74,12 +76,51 @@ fun MusicKnob(
                     touchX = motionEvent.x
                     touchY = motionEvent.y
 
-//minus indicates direction of the angle
+                    //Calculate Sweep Angle
+
+                     //minus indicates direction of the angle
                     //atan2 - inverse of tan and returns sweep angle in Degrees
-                    val angleInRadians = -atan2(x = centerX - touchX, y =centerY - touchX)
+                    val angleInRadians = -atan2(x = centerX - touchX, y =centerY - touchY)
+                    val angle =Math.toDegrees(angleInRadians.toDouble())
 
 
-                    val angle =Math.toDegrees(angleInRadians)
+                    //PERFORM ROTATION
+                    //establish if we have the correct touch event depending on action
+
+                    when(motionEvent.action){
+
+                        //perform calculation on-tap and on-move
+
+                       // MotionEvent.ACTION_DOWN -> {}
+                        MotionEvent.ACTION_MOVE -> {
+
+
+                            if (angle !in -limitingAngle..limitingAngle){
+                                val normalizedAngle = if (angle in -180f .. -limitingAngle){
+                                    //add 360 degrees for normal rotation
+                                    angle +360f
+                                }else{
+
+                                    //assign angle as it is
+
+                                    angle
+                                }
+
+
+                                rotation = normalizedAngle.toFloat()
+
+                                //map rotation to value btw zero and one
+                                val percent = ((normalizedAngle - limitingAngle)/ (360f - (2*limitingAngle)))
+
+                                //we call onValueChange() with the percentage
+                                onValueChange(percent.toFloat())
+
+                                true
+                            }else false
+                        }
+
+                        else -> false
+                    }
                 }
     )
 
