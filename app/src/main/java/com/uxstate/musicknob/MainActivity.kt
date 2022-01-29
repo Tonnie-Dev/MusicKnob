@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.MotionEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -134,7 +138,7 @@ fun MusicKnob(
 }
 
 @Composable
-fun VolumeBar(modifier: Modifier = Modifier, activeBars:Int = 0, barCount:Int = 0) {
+fun VolumeBar(modifier: Modifier = Modifier, activeBars: Int = 0, barCount: Int = 0) {
 
     BoxWithConstraints(modifier = modifier, contentAlignment = Alignment.Center) {
 
@@ -143,7 +147,22 @@ fun VolumeBar(modifier: Modifier = Modifier, activeBars:Int = 0, barCount:Int = 
 
         val barWidth = remember {
 
-            constraints.maxWidth /(barCount * 2f)
+            constraints.maxWidth / (barCount * 2f)
         }
+
+
+        //draw bars
+        Canvas(modifier = modifier, onDraw = {
+
+            for (i in 0 until barCount) {
+
+                drawRoundRect(color = if (i in 0..activeBars) Color.Green else Color.DarkGray,
+                    topLeft = Offset(i * barWidth * 2f + barWidth/2f,0f),
+                    size = Size(width = barWidth, constraints.maxHeight.toFloat())
+                )
+            }
+
+
+        })
     }
 }
