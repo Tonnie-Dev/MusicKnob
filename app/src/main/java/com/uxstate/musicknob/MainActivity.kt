@@ -67,40 +67,40 @@ fun MusicKnob(
 
                 }
 
-            //detect touch position
+                //detect touch position
 
                 .pointerInteropFilter {
 
-                    motionEvent ->
+                        motionEvent ->
 
-                  //set touch coordinates to motion event
+                    //set touch coordinates to motion event
                     touchX = motionEvent.x
                     touchY = motionEvent.y
 
                     //Calculate Sweep Angle
 
-                     //minus indicates direction of the angle
+                    //minus indicates direction of the angle
                     //atan2 - inverse of tan and returns sweep angle in Degrees
-                    val angleInRadians = -atan2(x = centerX - touchX, y =centerY - touchY)
-                    val angle =Math.toDegrees(angleInRadians.toDouble())
+                    val angleInRadians = -atan2(x = centerX - touchX, y = centerY - touchY)
+                    val angle = Math.toDegrees(angleInRadians.toDouble())
 
 
                     //PERFORM ROTATION
                     //establish if we have the correct touch event depending on action
 
-                    when(motionEvent.action){
+                    when (motionEvent.action) {
 
                         //perform calculation on-tap and on-move
 
-                       // MotionEvent.ACTION_DOWN -> {}
+                        // MotionEvent.ACTION_DOWN -> {}
                         MotionEvent.ACTION_MOVE -> {
 
 
-                            if (angle !in -limitingAngle..limitingAngle){
-                                val normalizedAngle = if (angle in -180f .. -limitingAngle){
+                            if (angle !in -limitingAngle..limitingAngle) {
+                                val normalizedAngle = if (angle in -180f..-limitingAngle) {
                                     //add 360 degrees for normal rotation
-                                    angle +360f
-                                }else{
+                                    angle + 360f
+                                } else {
 
                                     //assign angle as it is
 
@@ -111,20 +111,28 @@ fun MusicKnob(
                                 rotation = normalizedAngle.toFloat()
 
                                 //map rotation to value btw zero and one
-                                val percent = ((normalizedAngle - limitingAngle)/ (360f - (2*limitingAngle)))
+                                val percent =
+                                    ((normalizedAngle - limitingAngle) / (360f - (2 * limitingAngle)))
 
                                 //we call onValueChange() with the percentage
                                 onValueChange(percent.toFloat())
 
                                 true
-                            }else false
+                            } else false
                         }
 
                         else -> false
                     }
 
                     //rotate image at the very end
-                }.rotate(rotation)
+                }
+                .rotate(rotation)
     )
 
+}
+
+@Composable
+fun VolumeBar(modifier: Modifier = Modifier, activeBars:Int = 0, barCount:Int = 0) {
+
+    
 }
