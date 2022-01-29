@@ -12,6 +12,8 @@ import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import com.uxstate.musicknob.ui.theme.MusicKnobTheme
+import kotlin.math.atan
+import kotlin.math.atan2
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +40,6 @@ fun MusicKnob(
     var rotation by remember { mutableStateOf(limitingAngle) }
 
     //touch val point
-
     var touchX by remember { mutableStateOf(0f) }
     var touchY by remember { mutableStateOf(0f) }
 
@@ -52,8 +53,10 @@ fun MusicKnob(
         modifier = modifier
                 .fillMaxSize()
 
-                //establish knob anchor position
+                //establish knob anchor-centre position
                 .onGloballyPositioned {
+
+                    //boundary of the image relative to the screen
                     val windowBounds = it.boundsInWindow()
 
                     centerX = windowBounds.size.width / 2f
@@ -61,14 +64,22 @@ fun MusicKnob(
 
                 }
 
-            //establish touch position
+            //detect touch position
 
                 .pointerInteropFilter {
 
                     motionEvent ->
 
+                  //set touch coordinates to motion event
                     touchX = motionEvent.x
                     touchY = motionEvent.y
+
+//minus indicates direction of the angle
+                    //atan2 - inverse of tan and returns sweep angle in Degrees
+                    val angleInRadians = -atan2(x = centerX - touchX, y =centerY - touchX)
+
+
+                    val angle =Math.toDegrees(angleInRadians)
                 }
     )
 
