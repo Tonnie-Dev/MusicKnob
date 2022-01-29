@@ -6,8 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -20,6 +22,7 @@ import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.uxstate.musicknob.ui.theme.MusicKnobTheme
 import kotlin.math.atan2
 
@@ -27,8 +30,28 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MusicKnobTheme() {
+            MusicKnobTheme {
 
+
+                Box(
+                    modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color(0xFF101010)),
+                    contentAlignment = Alignment.Center
+                ) {
+
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.border(
+                            width = 1.dp,
+                            color = Color.Green,
+                            shape = RoundedCornerShape(10.dp)
+                        ).padding(30.dp)
+                    ) {
+
+                    }
+                }
 
             }
 
@@ -156,8 +179,9 @@ fun VolumeBar(modifier: Modifier = Modifier, activeBars: Int = 0, barCount: Int 
 
             for (i in 0 until barCount) {
 
-                drawRoundRect(color = if (i in 0..activeBars) Color.Green else Color.DarkGray,
-                    topLeft = Offset(i * barWidth * 2f + barWidth/2f,0f),
+                drawRoundRect(
+                    color = if (i in 0..activeBars) Color.Green else Color.DarkGray,
+                    topLeft = Offset(i * barWidth * 2f + barWidth / 2f, 0f),
                     size = Size(width = barWidth, constraints.maxHeight.toFloat())
                 )
             }
