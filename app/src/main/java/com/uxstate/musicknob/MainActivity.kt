@@ -24,7 +24,9 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.uxstate.musicknob.ui.theme.MusicKnobTheme
+import kotlin.math.PI
 import kotlin.math.atan2
+import kotlin.math.roundToInt
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,14 +45,38 @@ class MainActivity : ComponentActivity() {
                     Row(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.border(
-                            width = 1.dp,
-                            color = Color.Green,
-                            shape = RoundedCornerShape(10.dp)
-                        ).padding(30.dp)
+                        modifier = Modifier
+                                .border(
+                                    width = 1.dp,
+                                    color = Color.Green,
+                                    shape = RoundedCornerShape(10.dp)
+                                )
+                                .padding(30.dp)
                     ) {
 
+                        var volume by remember {
+                            mutableStateOf(0f)
+                        }
+
+                        val barCount = 20
+
+                        MusicKnob(
+                            onValueChange = { volume = it },
+                            modifier = Modifier.size(100.dp)
+                        )
+
+                        Spacer(modifier = Modifier.width(20.dp))
+
+                        VolumeBar(
+                            modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(30.dp),
+                            activeBars = (barCount * volume).roundToInt(),
+                            barCount = barCount
+                        )
                     }
+
+
                 }
 
             }
@@ -64,7 +90,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MusicKnob(
     modifier: Modifier = Modifier,
-    limitingAngle: Float = .25f,
+    limitingAngle: Float = 25f,
     onValueChange: (Float) -> Unit
 ) {
 
@@ -110,8 +136,9 @@ fun MusicKnob(
 
                     //minus indicates direction of the angle
                     //atan2 - inverse of tan and returns sweep angle in Degrees
-                    val angleInRadians = -atan2(x = centerX - touchX, y = centerY - touchY)
-                    val angle = Math.toDegrees(angleInRadians.toDouble())
+                    val angleInRadians =
+                        -atan2(x = centerX - touchX, y = centerY - touchY) * (180f / PI).toFloat()
+                    // val angle = Math.toDegrees(angleInRadians.toDouble())
 
 
                     //PERFORM ROTATION
@@ -125,15 +152,15 @@ fun MusicKnob(
                         MotionEvent.ACTION_MOVE -> {
 
 
-                            if (angle !in -limitingAngle..limitingAngle) {
-                                val normalizedAngle = if (angle in -180f..-limitingAngle) {
+                            if (angleInRadians !in -limitingAngle..limitingAngle) {
+                                val normalizedAngle = if (angleInRadians in -180f..-limitingAngle) {
                                     //add 360 degrees for normal rotation
-                                    angle + 360f
+                                    angleInRadians  + 360f
                                 } else {
 
                                     //assign angle as it is
 
-                                    angle
+                                    angleInRadians
                                 }
 
 
@@ -146,10 +173,16 @@ fun MusicKnob(
                                 //we call onValueChange() with the percentage
                                 onValueChange(percent.toFloat())
 
+                                //pointerInteropFilter expects a boolean whether we handled the touch or not
                                 true
-                            } else false
+
+
+                            }
+                            //return false indicating a touch wasn't handled
+                            else false
                         }
 
+                        //return false  for when expression
                         else -> false
                     }
 
