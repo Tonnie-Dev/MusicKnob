@@ -137,8 +137,8 @@ fun MusicKnob(
                     //minus indicates direction of the angle
                     //atan2 - inverse of tan and returns sweep angle in Degrees
                     val angleInRadians =
-                        atan2(x = centerX - touchX, y = centerY - touchY) * (180f / PI).toFloat()
-                    // val angle = Math.toDegrees(angleInRadians.toDouble())
+                        atan2(x = centerX - touchX, y = centerY - touchY) /** (180f / PI).toFloat()*/
+                     val angle = Math.toDegrees(angleInRadians.toDouble())
 
 
                     //PERFORM ROTATION
@@ -147,24 +147,23 @@ fun MusicKnob(
                     when (motionEvent.action) {
 
                         //perform calculation on-tap and on-move
-
                   MotionEvent.ACTION_DOWN,
                         MotionEvent.ACTION_MOVE -> {
 
 
-                            if (angleInRadians !in -limitingAngle..limitingAngle) {
-                                val normalizedAngle = if (angleInRadians in -180f..-limitingAngle) {
+                            if (angle !in - limitingAngle .. limitingAngle) {
+                                val normalizedAngle = if (angle in -180f..-limitingAngle) {
                                     //add 360 degrees for normal rotation
-                                    angleInRadians  + 360f
+                                    angle  + 360f
                                 } else {
 
                                     //assign angle as it is
 
-                                    angleInRadians
+                                    angle
                                 }
 
 
-                                rotation = normalizedAngle //.toFloat()
+                                rotation = normalizedAngle .toFloat()
 
                                 //map rotation to value btw zero and one
                                 val percent =
